@@ -25,6 +25,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	print(resp.Candidates[0].Content)
+	// print the first candidate
+	log.Print(resp.Candidates[0].Content.Parts[0])
+	for _, candidate := range resp.Candidates {
+		log.Print(candidate.Content.Parts[0])
+		for _, part := range candidate.Content.Parts {
+			log.Print(part)
+		}
+	}
 
 }
