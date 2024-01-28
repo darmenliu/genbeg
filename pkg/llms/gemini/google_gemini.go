@@ -57,6 +57,6 @@ func (g *Gemini) GenerateContent(ctx context.Context, prompt string) (string, er
 }
 
 // Close the client.
-func (g *Gemini) Close() error {
+func (g *Gemini) CloseBackend() error {
 	return g.Client.Close()
 }

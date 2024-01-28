@@ -4,15 +4,16 @@ GOBUILD = $(GOCMD) build
 GOCLEAN = $(GOCMD) clean
 GOTEST = $(GOCMD) test
 GOGET = $(GOCMD) get
+GOFMT = gofmt
 
 # Build target
 build:
-	$(GOBUILD) -o your_binary_name
+	$(GOBUILD) -o nuwa-engineer cmd/main.go
 
 # Clean target
 clean:
 	$(GOCLEAN)
-	rm -f your_binary_name
+	rm -f nuwa-engineer
 
 # Test target
 test:
@@ -21,6 +22,10 @@ test:
 # Get dependencies
 deps:
 	$(GOGET) -v ./...
+
+fmt:
+	$(GOFMT) -w .
+
 
 # Default target
 default: build
