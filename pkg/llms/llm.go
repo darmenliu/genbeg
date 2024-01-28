@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-type Module interface {
+type Model interface {
 	// GenerateContent generates content from a prompt.
 	GenerateContent(ctx context.Context, prompt string) (string, error)
 }
