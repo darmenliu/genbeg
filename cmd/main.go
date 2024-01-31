@@ -25,7 +25,5 @@ func main() {
 
 	// print the response
 	log.Print(resp)
-	log.Print(prompts.FileFormatPrompt)
-	log.Print(prompts.CodeGeneratorPrompt)
-	log.Print(prompts.PhilosophyPrompt)
+	log.Print(prompts.GetSysPrompt())
 }

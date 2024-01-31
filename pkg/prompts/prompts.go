@@ -18,9 +18,13 @@ const (
 
 		"Example representation of a file:\n\n" +
 
-		"src/hello_world.py\n" +
+		"cmd/hello_world.go\n" +
 		"```\n" +
-		"print(\"Hello World\")\n" +
+		"package main\n\n" +
+		"import \"fmt\"\n\n" +
+		"func main() {\n" +
+		"    fmt.Println(\"Hello, World!\")\n" +
+		"}\n" +
 		"```\n\n" +
 
 		"Do not comment on what every file does. Please note that the code should be fully functional. No placeholders."
@@ -33,7 +37,7 @@ FILE_FORMAT
 You will start with the "entrypoint" file, then go to the ones that are imported by that file, and so on.
 Please note that the code should be fully functional. No placeholders.
 
-Follow a language and framework appropriate best practice file naming convention.
+Follow Golang and framework appropriate best practice file naming convention.
 Make sure that files contain all imports, types etc.  The code should be fully functional. Make sure that code in different files are compatible with each other.
 Ensure to implement all code, if you are unsure, write a plausible implementation.
 Include module dependency or package manager dependency definition file.
@@ -42,12 +46,10 @@ Before you finish, double check that all parts of the architecture is present in
 When you are done, write finish with "this concludes a fully working implementation".`
 
 	PhilosophyPrompt string = `Almost always put different classes in different files.
-Always use the programming language the user asks for.
-For Python, you always create an appropriate requirements.txt file.
-For NodeJS, you always create an appropriate package.json file.
+Always use Golang as the programming language.
 Always add a comment briefly describing the purpose of the function definition.
 Add comments explaining very complex bits of logic.
-Always follow the best practices for the requested languages for folder/file structure and how to package the project.
+Always follow the best practices for the Golang for folder/file structure and how to package the project.
 
 
 Python toolbelt preferences:
@@ -60,4 +62,8 @@ You will write a very long answer. Make sure that every detail of the architectu
 
 func GetCodeGeneratorPrompt(fileFormat string) string {
 	return strings.Replace(CodeGeneratorPrompt, "FILE_FORMAT", fileFormat, 1)
+}
+
+func GetSysPrompt() string {
+	return RoadmapPrompt + "\n\n" + PhilosophyPrompt + "\n\n" + GetCodeGeneratorPrompt(FileFormatPrompt)
 }
