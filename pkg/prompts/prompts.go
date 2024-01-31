@@ -1,5 +1,7 @@
 package prompts
 
+import "strings"
+
 const (
 	// prompt for generate code format
 	FileFormatPrompt string = "You will output the content of each file necessary to achieve the goal, including ALL code.\n" +
@@ -55,3 +57,7 @@ Python toolbelt preferences:
 	RoadmapPrompt string = `You will get instructions for code to write.
 You will write a very long answer. Make sure that every detail of the architecture is, in the end, implemented as code.`
 )
+
+func GetCodeGeneratorPrompt(fileFormat string) string {
+	return strings.Replace(CodeGeneratorPrompt, "FILE_FORMAT", fileFormat, 1)
+}
