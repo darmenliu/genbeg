@@ -67,3 +67,7 @@ func GetCodeGeneratorPrompt(fileFormat string) string {
 func GetSysPrompt() string {
 	return RoadmapPrompt + "\n\n" + PhilosophyPrompt + "\n\n" + GetCodeGeneratorPrompt(FileFormatPrompt)
 }
+
+func GetUserPrompt(userPrompt string) string {
+	return GetSysPrompt() + "\n\n" + userPrompt
+}

@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
-	"log"
+	"log/slog"
+	"os"
+	"fmt"
 
 	"nuwa-engineer/pkg/llms/gemini"
 	"nuwa-engineer/pkg/prompts"
@@ -12,18 +14,33 @@ func main() {
 
 	ctx := context.Background()
 
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+
+	logger.Info("starting the application")
 	model, err := gemini.NewGemini(ctx)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("failed to create model,", err.Error())
+		return
 	}
 	defer model.CloseBackend()
 
-	resp, err := model.GenerateContent(ctx, "Write a story about a magic backpack.")
+	logger.Info("model created, and sending request to generate content")
+
+	userPrompt := `Please write a password checker, this tool help users to check if their
+	password is strong enough. The password should be at least 8 characters long, contain 
+	at least one uppercase letter, one lowercase letter,one number, and one special character. 
+	The tool should return a boolean value indicating whether the password is strong enough.`
+
+	prompt := prompts.GetUserPrompt(userPrompt)
+
+	fmt.Println(userPrompt)
+
+	resp, err := model.GenerateContent(ctx, prompt)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("failed to generate content", err.Error())
+		return
 	}
 
 	// print the response
-	log.Print(resp)
-	log.Print(prompts.GetSysPrompt())
+	fmt.Println(resp)
 }
