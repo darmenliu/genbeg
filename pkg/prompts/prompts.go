@@ -7,7 +7,7 @@ const (
 	FileFormatPrompt string = "You will output the content of each file necessary to achieve the goal, including ALL code.\n" +
 		"Represent files like so:\n\n" +
 
-		"FILENAME\n" +
+		"@FILENAME@\n" +
 		"```\n" +
 		"CODE\n" +
 		"```\n\n" +
@@ -18,7 +18,7 @@ const (
 
 		"Example representation of a file:\n\n" +
 
-		"cmd/hello_world.go\n" +
+		"@cmd/hello_world.go@\n" +
 		"```\n" +
 		"package main\n\n" +
 		"import \"fmt\"\n\n" +
