@@ -11,6 +11,10 @@ import (
 	"nuwa-engineer/pkg/prompts"
 )
 
+func FailureExit() {
+	os.Exit(1)
+}
+
 func main() {
 
 	ctx := context.Background()
@@ -21,9 +25,31 @@ func main() {
 	model, err := gemini.NewGemini(ctx)
 	if err != nil {
 		logger.Error("failed to create model,", err.Error())
-		return
+		FailureExit()
 	}
 	defer model.CloseBackend()
+
+	// Create nuwa-engineer workspace
+	workspaceManager := NewDefaultWorkSpaceManager()
+	err = workspaceManager.CreateWorkspace()
+	if err != nil {
+		logger.Error("failed to create workspace,", err.Error())
+		FailureExit()
+	}
+
+	// Create Golang project dir in the workspace, and initialize the project
+	err = workspaceManager.CreateGolangProject("password_checker")
+	if err != nil {
+		logger.Error("failed to create golang project,", err.Error())
+		FailureExit()
+	}
+
+	// Initialize the Golang project
+	err = workspaceManager.InitGolangProject("password_checker", "#PasswordChecker\n\n A password checker tool")
+	if err != nil {
+		logger.Error("failed to initialize golang project,", err.Error())
+		FailureExit()
+	}
 
 	logger.Info("model created, and sending request to generate content")
 
@@ -39,13 +65,13 @@ The tool should return a boolean value indicating whether the password is strong
 	resp, err := model.GenerateContent(ctx, prompt)
 	if err != nil {
 		logger.Error("failed to generate content", err.Error())
-		return
+		FailureExit()
 	}
 
 	codeblocks, err := parser.NewGoCodeParser().ParseCode(resp)
 	if err != nil {
 		logger.Error("failed to parse code", err.Error())
-		return
+		FailureExit()
 	}
 
 	// print the response

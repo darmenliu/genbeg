@@ -8,7 +8,7 @@ GOFMT = gofmt
 
 # Build target
 build:
-	$(GOBUILD) -o nuwa-engineer cmd/main.go
+	$(GOBUILD) -o nuwa-engineer ./cmd
 
 # Clean target
 clean:
