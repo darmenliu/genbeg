@@ -53,6 +53,7 @@ func (d *DefaultWorkSpaceManager) CreateWorkspace() error {
 func (d *DefaultWorkSpaceManager) CreateGolangProject(projectName string) error {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	projectPath := filepath.Join(d.WorkSpacePath, projectName)
+	logger.Info("creating project", "path", projectPath)
 	if projectPath == "" {
 		logger.Error("failed to get project path")
 		return fmt.Errorf("failed to get project path")
@@ -64,7 +65,7 @@ func (d *DefaultWorkSpaceManager) CreateGolangProject(projectName string) error 
 		logger.Error("failed to create project", err.Error())
 		return fmt.Errorf("failed to create project: %w", err)
 	}
-
+	logger.Info("project created", "path", projectPath)
 	return nil
 }
 
@@ -72,41 +73,42 @@ func (d *DefaultWorkSpaceManager) CreateGolangProject(projectName string) error 
 func (d DefaultWorkSpaceManager) InitGolangProject(projectPath string, description string) error {
 	// Create cmd dir
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	err := dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(projectPath, "cmd"))
+	fullPath := filepath.Join(d.WorkSpacePath, projectPath)
+	err := dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(fullPath, "cmd"))
 	if err != nil {
 		logger.Error("failed to create cmd dir", "err", err.Error())
 		return fmt.Errorf("failed to create cmd dir: %w", err)
 	}
 
 	// Create pkg dir
-	err = dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(projectPath, "pkg"))
+	err = dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(fullPath, "pkg"))
 	if err != nil {
 		logger.Error("failed to create pkg dir", "err", err.Error())
 		return fmt.Errorf("failed to create pkg dir: %w", err)
 	}
 
 	// Create internal dir
-	err = dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(projectPath, "internal"))
+	err = dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(fullPath, "internal"))
 	if err != nil {
 		logger.Error("failed to create internal dir", "err", err.Error())
 		return fmt.Errorf("failed to create internal dir: %w", err)
 	}
 
 	// Create test dir
-	err = dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(projectPath, "test"))
+	err = dir.NewDefaultDirectoryCreator().CreateDir(filepath.Join(fullPath, "test"))
 	if err != nil {
 		logger.Error("failed to create test dir", "err", err.Error())
 		return fmt.Errorf("failed to create test dir: %w", err)
 	}
 
 	// Create readme.md
-	readmePath := filepath.Join(projectPath, "README.md")
+	readmePath := filepath.Join(fullPath, "README.md")
 	err = nfile.NewFileWriter().WriteToFile(readmePath, description)
 	if err != nil {
 		logger.Error("failed to create README.md", "err", err.Error())
 		return fmt.Errorf("failed to create readme.md: %w", err)
 	}
 
-	logger.Info("project initialized", "path", projectPath)
+	logger.Info("project initialized", "path", fullPath)
 	return nil
 }

@@ -24,7 +24,7 @@ func main() {
 	logger.Info("starting the application")
 	model, err := gemini.NewGemini(ctx)
 	if err != nil {
-		logger.Error("failed to create model,", err.Error())
+		logger.Error("failed to create model,", "err", err.Error())
 		FailureExit()
 	}
 	defer model.CloseBackend()
@@ -33,21 +33,21 @@ func main() {
 	workspaceManager := NewDefaultWorkSpaceManager()
 	err = workspaceManager.CreateWorkspace()
 	if err != nil {
-		logger.Error("failed to create workspace,", err.Error())
+		logger.Error("failed to create workspace,", "err", err.Error())
 		FailureExit()
 	}
 
 	// Create Golang project dir in the workspace, and initialize the project
 	err = workspaceManager.CreateGolangProject("password_checker")
 	if err != nil {
-		logger.Error("failed to create golang project,", err.Error())
+		logger.Error("failed to create golang project,", "err", err.Error())
 		FailureExit()
 	}
 
 	// Initialize the Golang project
 	err = workspaceManager.InitGolangProject("password_checker", "#PasswordChecker\n\n A password checker tool")
 	if err != nil {
-		logger.Error("failed to initialize golang project,", err.Error())
+		logger.Error("failed to initialize golang project,", "err", err.Error())
 		FailureExit()
 	}
 
@@ -64,13 +64,13 @@ The tool should return a boolean value indicating whether the password is strong
 
 	resp, err := model.GenerateContent(ctx, prompt)
 	if err != nil {
-		logger.Error("failed to generate content", err.Error())
+		logger.Error("failed to generate content", "err", err.Error())
 		FailureExit()
 	}
 
 	codeblocks, err := parser.NewGoCodeParser().ParseCode(resp)
 	if err != nil {
-		logger.Error("failed to parse code", err.Error())
+		logger.Error("failed to parse code", "err", err.Error())
 		FailureExit()
 	}
 
@@ -80,7 +80,7 @@ The tool should return a boolean value indicating whether the password is strong
 	for _, code := range codeblocks {
 		code.ParseFileName()
 		code.ParseFileContent()
-		logger.Info("File Name:", code.FileName)
+		logger.Info("debug", "file name", code.FileName)
 		fmt.Println(code.FileName)
 		fmt.Println(code.FileContent)
 	}
