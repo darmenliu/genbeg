@@ -9,3 +9,10 @@ import (
 func GetWorkspacePath() string {
 	return os.Getenv("NUWA_WORKSPACE")
 }
+
+// Check the dir exist
+func IsWorkspaceExist(dir string) bool {
+	_, err := os.Stat(dir)
+	return !os.IsNotExist(err)
+}
+

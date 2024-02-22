@@ -66,16 +66,20 @@ func main() {
 		putils.LettersFromStringWithStyle(" Engineer", pterm.FgLightMagenta.ToStyle())).
 		Render() // Render the big text to the terminal
 
-	//logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	// logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelTrace)
 
-
-	// // Create nuwa-engineer workspace
-	// workspaceManager := NewDefaultWorkSpaceManager()
-	// err = workspaceManager.CreateWorkspace()
-	// if err != nil {
-	// 	logger.Error("failed to create workspace,", "err", err.Error())
-	// 	FailureExit()
-	// }
+	// Create nuwa-engineer workspace
+	workspaceManager := NewDefaultWorkSpaceManager()
+	if workspaceManager.IsWorkspaceEixst() {
+		logger.Info("workspace already exist")
+	} else {
+		err := workspaceManager.CreateWorkspace()
+		if err != nil {
+			logger.Error("failed to create workspace,", logger.Args("err", err.Error()))
+			FailureExit()
+		}
+	}
 
 // 	// Create Golang project dir in the workspace, and initialize the project
 // 	err = workspaceManager.CreateGolangProject("password_checker")

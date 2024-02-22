@@ -11,6 +11,8 @@ import (
 )
 
 type WorkSpaceManager interface {
+	// Check workspace is created
+	IsWorkspaceEixst() bool
 	// CreateWorkspace creates a new workspace.
 	CreateWorkspace() error
 	// CreateGolangProject creates a new Golang project in the workspace.
@@ -25,6 +27,11 @@ type DefaultWorkSpaceManager struct {
 
 func NewDefaultWorkSpaceManager() WorkSpaceManager {
 	return &DefaultWorkSpaceManager{WorkSpacePath: "./workspace"}
+}
+
+// Check workspace is created
+func (d *DefaultWorkSpaceManager) IsWorkspaceEixst() bool {
+	return workspace.IsWorkspaceExist(d.WorkSpacePath)
 }
 
 // Initialize the workspace for nuwa-engineer
